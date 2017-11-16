@@ -17,6 +17,7 @@ class Item extends React.Component {
     }
     enter() {
         const nextItem = this.props.getNext();
+        console.log(nextItem, this.state.id)
         if(nextItem === this.state.id) {
             this.setState({
                 color: 'white',

@@ -7,6 +7,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Entity, Scene } from 'aframe-react';
 
+import Item from './Item'
 import {
     createIndexArray,
     shuffleArray,
@@ -75,6 +76,7 @@ class App extends React.Component {
         let queue = this.state.queue;
         items[id] = null;
         queue.shift();
+        console.log(items, queue);
 
         this.setState({
             items,
@@ -86,10 +88,35 @@ class App extends React.Component {
         return this.state.queue[0];
     }
     render () {
+        let { items, queue } = this.state;
+        let nextItem = {};
+
+        if (queue.length === 0) {
+            items = null;
+            nextItem = <Item
+                    primitive='a-sphere'
+                    position='2.5 1.3 -3'
+                    radius='0.3'
+                    color='grey'
+                    remove={ () => {} }
+                    getNext={ () => {} }
+                />;
+        } else {
+            console.log(items[queue[0]].props.color);
+            nextItem = <Item
+                    primitive='a-sphere'
+                    position='2.5 1.3 -3'
+                    radius='0.3'
+                    color={ items[queue[0]].props.color }
+                    remove={ () => {} }
+                    getNext={ () => {} }
+                />;
+        }
+
         return (
             <Scene inspector='url: https://aframe.io/releases/0.3.0/aframe-inspector.min.js'>
                 <a-assets>
-                    <img id="skyTexture" src="https://ucarecdn.com/75af695e-0a70-4c64-af3b-7279d5ad916c/"/>
+                    <img id='skyTexture' src='https://ucarecdn.com/75af695e-0a70-4c64-af3b-7279d5ad916c/' alt='altprop' />
                 </a-assets>
 
                 <Entity primitive="a-sky" height="2048" radius="30" src="#skyTexture" theta-length="90" width="2048"/>
@@ -103,9 +130,10 @@ class App extends React.Component {
                 <Entity primitive='a-plane' position='1.98 2 -3.95' rotation='0 -90 0' width='1' height='4' color='brown' />
                 <Entity primitive='a-plane' position='-2.02 2 -3.98' rotation='0 90 0' width='1' height='4' color='brown' />
 
-                {this.state.items}
+                {items}
 
-                <Entity text={{value: 'Score: ' + this.state.score, align: 'center'}} position={{x: 0, y: 2, z: -1}}/>
+                <Entity text={{value: 'Next:', align: 'center', width: 8}} position={{x: 2.5, y: 2, z: -3}}/>
+                {nextItem}
                 <Entity primitive='a-camera'>
                     <Entity primitive='a-cursor' />
                 </Entity>
