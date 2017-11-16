@@ -16,15 +16,22 @@ class Item extends React.Component {
         };
     }
     enter() {
-        this.setState({
-            color: 'white',
-        });
-        this.props.remove(this.state.id);
+        const nextItem = this.props.getNext();
+        if(nextItem === this.state.id) {
+            this.setState({
+                color: 'white',
+            });
+            setTimeout(() => this.props.remove(this.state.id), 1000);
+        } else {
+            this.setState({
+                color: 'grey',
+            });
+        }
     }
     leave() {
-        // this.setState({
-        //     color: this.state.defaultColor,
-        // });
+        this.setState({
+            color: this.state.defaultColor,
+        });
     }
     render () {
         return (
@@ -35,6 +42,7 @@ class Item extends React.Component {
                 color={ this.state.color }
                 radius={ this.props.radius }
                 height={ this.props.height }
+                width={ this.props.width }
                 events={{ mouseenter: this.enter.bind(this), mouseleave: this.leave.bind(this) }}>
             </Entity>
         );
