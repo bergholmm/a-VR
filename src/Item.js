@@ -15,6 +15,15 @@ class Item extends React.Component {
             id: props.id,
         };
     }
+
+    componentWillReceiveProps(nextProps) {
+        this.state = {
+          color: nextProps.color,
+          defaultColor: nextProps.color,
+          id: nextProps.id,
+        };
+    }
+
     enter() {
         const nextItem = this.props.getNext();
         console.log(nextItem, this.state.id)

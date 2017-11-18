@@ -28,43 +28,6 @@ class App extends React.Component {
         }
         let items = generateItemList(itemProps);
 
-        // let items = [
-        //         <Item
-        //             key={ 0 }
-        //             id={ 0 }
-        //             primitive='a-box'
-        //             position='-3 1.5 -3'
-        //             rotation='0 45 0'
-        //             color='green'
-        //             radius='0.3'
-        //             height='0.3'
-        //             width='0.3'
-        //             remove={ this.removeEntity.bind(this) }
-        //             getNext={ this.getNextItem.bind(this) }
-        //         />,
-        //         <Item
-        //             key={ 1 }
-        //             id={ 1 }
-        //             primitive='a-sphere'
-        //             position='3 1.25 -5'
-        //             radius='1.25'
-        //             color='#EF2D5E'
-        //             remove={ this.removeEntity.bind(this) }
-        //             getNext={ this.getNextItem.bind(this) }
-        //         />,
-        //         <Item
-        //             key={ 2 }
-        //             id={ 2 }
-        //             primitive='a-cylinder'
-        //             position='3 0.75 -3'
-        //             radius='0.5'
-        //             height='1.5'
-        //             color='#FFC65D'
-        //             remove={ this.removeEntity.bind(this) }
-        //             getNext={ this.getNextItem.bind(this) }
-        //         />
-        // ];
-
         this.state = {
             items,
             queue,
@@ -102,15 +65,18 @@ class App extends React.Component {
                     getNext={ () => {} }
                 />;
         } else {
+            console.log("Render triggered");
             console.log(items[queue[0]].props.color);
+
+            let x = items[queue[0]].props.color;
             nextItem = <Item
                     primitive='a-sphere'
                     position='2.5 1.3 -3'
                     radius='0.3'
-                    color={ items[queue[0]].props.color }
+                    color={ x }
                     remove={ () => {} }
                     getNext={ () => {} }
-                />;
+                />
         }
 
         return (
