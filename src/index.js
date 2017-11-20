@@ -71,6 +71,8 @@ class App extends React.Component {
             let x = items[queue[0]].props.color;
             nextItem = <Item
                     primitive={ items[queue[0]].props.primitive }
+                    width={ items[queue[0]].props.width }
+                    depth={ items[queue[0]].props.depth }
                     height={ items[queue[0]].props.height}
                     position='2.5 1.3 -3'
                     radius='0.3'

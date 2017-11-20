@@ -27,7 +27,7 @@ export const generateItemList = (props, length = 9) => {
     let items = [];
     for (let i = 0; i < length; ++i) {
 
-        let y = itemTypes[Math.floor(Math.random()*2)+1];
+        let y = itemTypes[Math.floor(Math.random()*itemTypes.length)];
 
         items.push(
             <Item
@@ -36,7 +36,9 @@ export const generateItemList = (props, length = 9) => {
                 primitive={ y }
                 position={ itemPositions[i] }
                 radius='0.3'
-                height={ ((y === 'a-cylinder') ? '0.5' : null )}
+                height={ ((y === 'a-sphere') ? null : '0.5' )}
+                width={  ((y === 'a-box') ? '0.5' : null) }
+                depth={ ((y === 'a-box') ? '0.5' : null)}
                 color={ itemColors[Math.floor(Math.random()*itemColors.length)] }
                 remove={ props.removeEntity }
                 getNext={ props.getNextItem }
