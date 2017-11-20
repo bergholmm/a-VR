@@ -70,7 +70,8 @@ class App extends React.Component {
 
             let x = items[queue[0]].props.color;
             nextItem = <Item
-                    primitive='a-sphere'
+                    primitive={ items[queue[0]].props.primitive }
+                    height={ items[queue[0]].props.height}
                     position='2.5 1.3 -3'
                     radius='0.3'
                     color={ x }
@@ -97,7 +98,6 @@ class App extends React.Component {
                 <Entity primitive='a-plane' position='-2.02 2 -3.98' rotation='0 90 0' width='1' height='4' color='brown' />
 
                 {items}
-
                 <Entity text={{value: 'Next:', align: 'center', width: 8}} position={{x: 2.5, y: 2, z: -3}}/>
                 {nextItem}
                 <Entity primitive='a-camera'>

@@ -26,7 +26,7 @@ class Item extends React.Component {
 
     enter() {
         const nextItem = this.props.getNext();
-        console.log(nextItem, this.state.id)
+        console.log(nextItem, this.state.id);
         if(nextItem === this.state.id) {
             this.setState({
                 color: 'white',
@@ -53,6 +53,7 @@ class Item extends React.Component {
                 radius={ this.props.radius }
                 height={ this.props.height }
                 width={ this.props.width }
+                depth={ this.props.depth }
                 events={{ mouseenter: this.enter.bind(this), mouseleave: this.leave.bind(this) }}>
             </Entity>
         );
