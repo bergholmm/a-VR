@@ -5,109 +5,230 @@ import 'babel-polyfill';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Entity, Scene } from 'aframe-react';
+import App from './app';
+import Slider from 'rc-slider';
+import Tooltip from 'rc-tooltip';
+import '../node_modules/rc-slider/assets/index.css';
+import './style.css';
+import { itemTypes } from './utils';
 
-import Item from './Item'
-import {
-    createIndexArray,
-    shuffleArray,
-    generateItemList
-} from './utils';
+const a = ['a-box', 'a-sphere', 'a-cylinder'];
+
+const createSliderWithTooltip = Slider.createSliderWithTooltip;
+const Range = createSliderWithTooltip(Slider.Range);
+const Handle = Slider.Handle;
 
 
-class App extends React.Component {
+class Index extends React.Component {
     constructor(props) {
         super(props);
 
-        let queue = createIndexArray(9);
-        queue = shuffleArray(queue);
-
-        let itemProps = {
-            removeEntity: this.removeEntity.bind(this),
-            getNextItem: this.getNextItem.bind(this),
-        }
-        let items = generateItemList(itemProps);
-
         this.state = {
-            items,
-            queue,
-            score: 0,
+            settings: {
+                numItems: 9,
+                randomSequence: true,
+                allowedItems: ['a-box', 'a-sphere', 'a-cylinder'],
+                env: 1,
+            },
+            started: false,
         };
     }
-    removeEntity(id) {
-        let items = this.state.items;
-        let queue = this.state.queue;
-        items[id] = null;
-        queue.shift();
-        console.log(items, queue);
+    selectEnv(env) {
+        let { settings } = this.state;
+        settings.env = env;
 
         this.setState({
-            items,
-            queue,
-            score: this.state.score + 1,
+            settings,
         });
     }
-    getNextItem() {
-        return this.state.queue[0];
+    start() {
+        this.setState({
+            started: true,
+        });
+    }
+    handle(props) {
+        const { value, dragging, index, ...restProps } = props;
+        return (
+            <Tooltip
+            prefixCls="rc-slider-tooltip"
+            overlay={value}
+            visible={dragging}
+            placement="top"
+            key={index}
+            >
+            <Handle value={value} {...restProps} />
+            </Tooltip>
+        );
+    }
+    updateSliderState(value) {
+        let { settings } = this.state;
+        settings.numItems = value;
+        this.setState({
+            settings,
+        });
+    }
+    setRandomSeq() {
+        const { settings: { randomSequence } } = this.state;
+        let { settings } = this.state;
+
+        settings.randomSequence = !randomSequence;
+
+        this.setState({
+            settings,
+        });
+    }
+    setItem(itemName) {
+        let { settings } = this.state;
+
+        const index = settings.allowedItems.indexOf(itemName);
+
+        if (index === -1) {
+            settings.allowedItems.push(itemName);
+        } else {
+            settings.allowedItems.splice(index, 1);
+        }
+
+        this.setState({
+            settings,
+        });
     }
     render () {
-        let { items, queue } = this.state;
-        let nextItem = {};
+        const { started, settings } = this.state;
+        let content = <div></div>;
+        console.log(settings)
 
-        if (queue.length === 0) {
-            items = null;
-            nextItem = <Item
-                    primitive='a-sphere'
-                    position='2.5 1.3 -3'
-                    radius='0.3'
-                    color='grey'
-                    remove={ () => {} }
-                    getNext={ () => {} }
-                />;
+        const availableItemsText = settings.allowedItems.reduce((prev, next) => prev + next + ' ', '');
+        const availableItems = itemTypes.map((itemName) => {
+            const index = settings.allowedItems.indexOf(itemName);
+            let checked = true;
+
+            if (index === -1) {
+                checked = false;
+            }
+            return (
+                <label className="checkbox">
+                    <input onClick={ () => this.setItem(itemName) } className='radioEnv' type="checkbox" checked={ checked }/>
+                {itemName}
+                </label>
+            );
+        });
+
+        if ( started ) {
+            content = (
+                <App />
+            );
         } else {
-            console.log("Render triggered");
-            console.log(items[queue[0]].props.color);
+            const header = (
+                <div className="hero-head">
+                      <section className="hero is-primary is-medium" id="contact">
+                        <div className="hero-body">
+                          <div className="container">
+                            <div className="header-titles">
+                              <h3 className="title is-3 is-spaced">App Name Here</h3>
+                              <h5 className="subtitle is-5 is-spaced">A web VR game</h5>
+                            </div>
+                            <div className="header-buttons">
+                              <span className="control">
+                                <a onClick={ this.start.bind(this) } className="button is-primary">
+                                  <span>Start game</span>
+                                </a>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </section>
+                </div>
+            );
 
-            let x = items[queue[0]].props.color;
-            nextItem = <Item
-                    primitive={ items[queue[0]].props.primitive }
-                    width={ items[queue[0]].props.width }
-                    depth={ items[queue[0]].props.depth }
-                    height={ items[queue[0]].props.height}
-                    position='2.5 1.3 -3'
-                    radius='0.3'
-                    color={ x }
-                    remove={ () => {} }
-                    getNext={ () => {} }
-                />
+            const footer = (
+                <div className="hero-footer footer">
+                    <div className="container has-text-centered">
+                        <span className="icon">
+                            <i className="fa fa-github"></i>
+                        </span>
+                        <p><a href='https://github.com/bergholmm/a-VR'>github.com/bergholmm/a-VR</a></p>
+                    </div>
+                </div>
+            );
+
+            const body = (
+                <div className='block'>
+                    <div className='columns'>
+                        <div className='column'>
+                            <div className='control'>
+                                <label className='radio'>
+                                    <input onClick={ () => this.selectEnv(1) } className='radioEnv' type='radio' name='env' />
+                                    Env 1
+                                </label>
+                                <label className='radio'>
+                                    <input onClick={ () => this.selectEnv(2) } className='radioEnv' type='radio' name='env'/>
+                                    Env 2
+                                </label>
+                                <label className='radio'>
+                                    <input onClick={ () => this.selectEnv(3) } className='radioEnv' type='radio' name='env'/>
+                                    Env 3
+                                </label>
+                            </div>
+                            <div className='slider-container'>
+                                <text> Number of items</text>
+                                <Slider max={ 20 } defaultValue={ 9 } handle={ this.handle.bind(this) } onAfterChange={ this.updateSliderState.bind(this) }/>
+                            </div>
+                            <label className="checkbox">
+                                <input onClick={ this.setRandomSeq.bind(this) }className='radioEnv' type="checkbox" checked={ settings.randomSequence }/>
+                                Random sequence
+                                {'  //TODO if manual seq selected -> show options for it'}
+                            </label>
+                            <div className='slider-container'>
+                                {availableItems}
+                            </div>
+                        </div>
+                        <div className='column'>
+                            <table className='table'>
+                                <thead>
+                                    <tr>
+                                        <th>Option</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>Environment</th>
+                                        <th>{settings.env}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Number of items</th>
+                                        <th>{settings.numItems}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Random sequence</th>
+                                        <th>{String(settings.randomSequence)}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Allowed items</th>
+                                        <th>{availableItemsText}</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            content = (
+                <div>
+                    { header }
+                    { body }
+                    { footer }
+                </div>
+            );
         }
 
         return (
-            <Scene inspector='url: https://aframe.io/releases/0.3.0/aframe-inspector.min.js'>
-                <a-assets>
-                    <img id='skyTexture' src='https://ucarecdn.com/75af695e-0a70-4c64-af3b-7279d5ad916c/' alt='altprop' />
-                </a-assets>
-
-                <Entity primitive="a-sky" height="2048" radius="30" src="#skyTexture" theta-length="90" width="2048"/>
-                <Entity primitive='a-plane' position="0 -0.1 0" rotation="-90 0 0" width="60" height="60" color="#7BC8A4" />
-
-                <Entity primitive='a-plane' position='0 0.02 -3.97' rotation='-90 90 0' width='1' height='4' color='brown' />
-                <Entity primitive='a-plane' position='-0.02 4 -3.93' rotation='90 0 90' width='1' height='4' color='brown' />
-                <Entity primitive='a-plane' position='-0.02 2 -4.43' rotation='0 0 0' width='4' height='4' color='brown' />
-                <Entity primitive='a-plane' position='0.01 1.0 -3.98' rotation='-84 0 0' width='4' height='1' color='black' />
-                <Entity primitive='a-plane' position='0.01 2.5 -3.98' rotation='-74 0 0' width='4' height='1' color='black' />
-                <Entity primitive='a-plane' position='1.98 2 -3.95' rotation='0 -90 0' width='1' height='4' color='brown' />
-                <Entity primitive='a-plane' position='-2.02 2 -3.98' rotation='0 90 0' width='1' height='4' color='brown' />
-
-                {items}
-                <Entity text={{value: 'Next:', align: 'center', width: 8}} position={{x: 2.5, y: 2, z: -3}}/>
-                {nextItem}
-                <Entity primitive='a-camera'>
-                    <Entity primitive='a-cursor' />
-                </Entity>
-            </Scene>
+            <div>
+                {content}
+            </div>
         );
     }
 }
 
-ReactDOM.render(<App/>, document.querySelector('#sceneContainer'));
+ReactDOM.render(<Index/>, document.querySelector('#sceneContainer'));

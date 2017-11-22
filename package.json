@@ -8,6 +8,7 @@
     "aframe-particle-system-component": "^1.0.8",
     "aframe-react": "^4.0.x",
     "babel-polyfill": "^6.3.14",
+    "rc-slider": "^8.4.0",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "react-scripts": "0.9.5"
