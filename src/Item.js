@@ -31,7 +31,7 @@ class Item extends React.Component {
             this.setState({
                 color: 'white',
             });
-            setTimeout(() => this.props.remove(this.state.id), 1000);
+            this.tm = setTimeout(() => this.props.remove(this.state.id), 1000);
         } else {
             this.setState({
                 color: 'grey',
@@ -42,6 +42,7 @@ class Item extends React.Component {
         this.setState({
             color: this.state.defaultColor,
         });
+        clearTimeout(this.tm);
     }
     render () {
         return (
