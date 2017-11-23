@@ -20,6 +20,7 @@ import {
 class App extends React.Component {
     constructor(props) {
         super(props);
+
         let shelter = <Shelter width='5' height='5'/>
         this.state = {
           shelter: shelter
