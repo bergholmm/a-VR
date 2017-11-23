@@ -17,8 +17,8 @@ class Shelter extends Chose<Item> {
   constructor(props) {
     super(props);
 
-    this.width = props.width;
-    this.height = props.height;
+    this.width = Math.ceil(Math.sqrt(props.nbrItems));
+    this.height = this.width;
     this.coeff = 1.333;
 
 
@@ -27,7 +27,7 @@ class Shelter extends Chose<Item> {
     let width = this.width*this.coeff;
     let height = this.height;
 
-    let queue = createIndexArray(this.width*this.height);
+    let queue = createIndexArray(props.nbrItems);
     queue = shuffleArray(queue);
 
     let itemProps = {
@@ -37,7 +37,7 @@ class Shelter extends Chose<Item> {
 
     let positions = this.positionList();
 
-    let listItems = generateItemList(itemProps, positions, this.width*this.height);
+    let listItems = generateItemList(itemProps, positions, props.nbrItems);
 
     let pos = [];
     for(let i = 0 ; i <= this.height ; i++) {

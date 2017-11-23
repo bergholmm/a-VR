@@ -21,7 +21,7 @@ class App extends React.Component {
     constructor(props) {
         super(props);
 
-        let shelter = <Shelter width='5' height='5'/>
+        let shelter = <Shelter nbrItems={props.nbrItems}/>
         this.state = {
           shelter: shelter
         }
