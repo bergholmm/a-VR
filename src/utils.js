@@ -1,23 +1,9 @@
 import React from 'react';
 import Item from './Item';
 
-//export const itemPositions = ['-1.3 2.3 -3.9', '0 2.3 -3.9', '1.3 2.3 -3.9', '-1.3 1.3 -3.9', '0 1.3 -3.9', '1.3 1.3 -3.9', '-1.3 0.3 -3.9', '0 0.3 -3.9', '1.3 0.3 -3.9'];
 export const itemTypes = ['a-box', 'a-sphere', 'a-cylinder'];
 export const itemColors = ['#4CC3D9', '#EF2D5E', '#FFC65D', '#7BC8A4', '#ca96fd', '#fdfd96'];
-export const itemColors2 = ['#03402b',
-'#9f3814',
-'#43f6db',
-'#8d2547',
-'#b10fe1',
-'#8f05dc',
-'#b5b1b2',
-'#7ff6ab',
-'#b2f5aa',
-'#e024ef',
-'#eb516d',
-'#81d3a4',
-'#c23009']
-
+export const itemColors2 = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', "#660066", '#336600', '#ff6600', '#4d1919'];
 
 export const shuffleArray = (array) => {
     for (var i = array.length - 1; i > 0; i--) {
