@@ -7,21 +7,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Entity, Scene } from 'aframe-react';
 
-import Item from './Item'
-import Chose from './chose'
 import Shelter from './Shelter'
-import {
-    createIndexArray,
-    shuffleArray,
-    generateItemList
-} from './utils';
-
 
 class App extends React.Component {
     constructor(props) {
         super(props);
+        const { settings } = props;
 
-        let shelter = <Shelter nbrItems={props.nbrItems}/>
+        let shelter = <Shelter nbrItems={settings.numItems}/>
         this.state = {
           shelter: shelter
         }
