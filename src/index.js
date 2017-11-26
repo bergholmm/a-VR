@@ -6,14 +6,11 @@ import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './app';
+import { itemTypes } from './utils';
+import { frontPageSettings, frontPageSelectEnv } from './frontPage';
+
 import Slider from 'rc-slider';
 import Tooltip from 'rc-tooltip';
-import '../node_modules/rc-slider/assets/index.css';
-import './style.css';
-import { itemTypes } from './utils';
-
-const a = ['a-box', 'a-sphere', 'a-cylinder'];
-
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 const Handle = Slider.Handle;
@@ -31,7 +28,9 @@ class Index extends React.Component {
                 env: 1,
             },
             started: false,
+            envSelected: false,
         };
+
     }
     selectEnv(env) {
         let { settings } = this.state;
@@ -39,11 +38,17 @@ class Index extends React.Component {
 
         this.setState({
             settings,
+            envSelected: true,
         });
     }
     start() {
         this.setState({
             started: true,
+        });
+    }
+    back() {
+        this.setState({
+            envSelected: false,
         });
     }
     handle(props) {
@@ -93,12 +98,12 @@ class Index extends React.Component {
         });
     }
     render () {
-        const { started, settings } = this.state;
+        const { started, envSelected, settings } = this.state;
         let content = <div></div>;
         console.log(settings)
 
         const availableItemsText = settings.allowedItems.reduce((prev, next) => prev + next + ' ', '');
-        const availableItems = itemTypes.map((itemName) => {
+        const availableItems = itemTypes.map((itemName, i) => {
             const index = settings.allowedItems.indexOf(itemName);
             let checked = true;
 
@@ -107,7 +112,7 @@ class Index extends React.Component {
             }
             return (
                 <label className="checkbox">
-                    <input onClick={ () => this.setItem(itemName) } className='radioEnv' type="checkbox" checked={ checked }/>
+                    <input key={i} onClick={ () => this.setItem(itemName) } className='radioEnv' type="checkbox" checked={ checked }/>
                 {itemName}
                 </label>
             );
@@ -115,112 +120,26 @@ class Index extends React.Component {
 
         if ( started ) {
             content = (
-                <App />
+                <App settings={ settings }/>
             );
+        }
+        else if ( envSelected ) {
+            const props = {
+                start: this.start.bind(this),
+                back: this.back.bind(this),
+                handle: this.handle.bind(this),
+                updateSliderState: this.updateSliderState.bind(this),
+                setRandomSeq: this.setRandomSeq.bind(this),
+                settings,
+                availableItems,
+                availableItemsText,
+            };
+            content = frontPageSettings(props);
         } else {
-            const header = (
-                <div className="hero-head">
-                      <section className="hero is-primary is-medium" id="contact">
-                        <div className="hero-body">
-                          <div className="container">
-                            <div className="header-titles">
-                              <h3 className="title is-3 is-spaced">App Name Here</h3>
-                              <h5 className="subtitle is-5 is-spaced">A web VR game</h5>
-                            </div>
-                            <div className="header-buttons">
-                              <span className="control">
-                                <a onClick={ this.start.bind(this) } className="button is-primary">
-                                  <span>Start game</span>
-                                </a>
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </section>
-                </div>
-            );
-
-            const footer = (
-                <div className="hero-footer footer">
-                    <div className="container has-text-centered">
-                        <span className="icon">
-                            <i className="fa fa-github"></i>
-                        </span>
-                        <p><a href='https://github.com/bergholmm/a-VR'>github.com/bergholmm/a-VR</a></p>
-                    </div>
-                </div>
-            );
-
-            const body = (
-                <div className='block'>
-                    <div className='columns'>
-                        <div className='column'>
-                            <div className='control'>
-                                <label className='radio'>
-                                    <input onClick={ () => this.selectEnv(1) } className='radioEnv' type='radio' name='env' />
-                                    Env 1
-                                </label>
-                                <label className='radio'>
-                                    <input onClick={ () => this.selectEnv(2) } className='radioEnv' type='radio' name='env'/>
-                                    Env 2
-                                </label>
-                                <label className='radio'>
-                                    <input onClick={ () => this.selectEnv(3) } className='radioEnv' type='radio' name='env'/>
-                                    Env 3
-                                </label>
-                            </div>
-                            <div className='slider-container'>
-                                <text> Number of items</text>
-                                <Slider max={ 20 } defaultValue={ 9 } handle={ this.handle.bind(this) } onAfterChange={ this.updateSliderState.bind(this) }/>
-                            </div>
-                            <label className="checkbox">
-                                <input onClick={ this.setRandomSeq.bind(this) }className='radioEnv' type="checkbox" checked={ settings.randomSequence }/>
-                                Random sequence
-                                {'  //TODO if manual seq selected -> show options for it'}
-                            </label>
-                            <div className='slider-container'>
-                                {availableItems}
-                            </div>
-                        </div>
-                        <div className='column'>
-                            <table className='table'>
-                                <thead>
-                                    <tr>
-                                        <th>Option</th>
-                                        <th>Value</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th>Environment</th>
-                                        <th>{settings.env}</th>
-                                    </tr>
-                                    <tr>
-                                        <th>Number of items</th>
-                                        <th>{settings.numItems}</th>
-                                    </tr>
-                                    <tr>
-                                        <th>Random sequence</th>
-                                        <th>{String(settings.randomSequence)}</th>
-                                    </tr>
-                                    <tr>
-                                        <th>Allowed items</th>
-                                        <th>{availableItemsText}</th>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            );
-
-            content = (
-                <div>
-                    { header }
-                    { body }
-                    { footer }
-                </div>
-            );
+            const props = {
+                setEnv: this.selectEnv.bind(this),
+            };
+            content = frontPageSelectEnv(props);
         }
 
         return (
