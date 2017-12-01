@@ -81,10 +81,27 @@ class Doors extends Chose<Door> {
   }
 
   render() {
+
+    let next = null;
+    let text = null;
+    if(this.hasNext()) {
+
+    console.log((this.nbr_items-1)*5/2);
+    text = <Entity text={{value: 'Next:', align: 'center', width: 8}} position={`${(this.nbr_items+0.5)*5/2} 3 -8`}/>
+    next = <Entity
+                  primitive="a-plane"
+                  position={`${(this.nbr_items+0.5)*5/2} 2 -8`}
+                  width="1"
+                  height="1"
+                  color={this.state.doors[this.next].props.color} />
+    }
+
     return (
       <Entity>
         {this.wall}
         {this.text}
+        {text}
+        {next}
         {this.state.doors}
       </Entity>
     );

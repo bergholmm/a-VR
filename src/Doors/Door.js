@@ -53,7 +53,6 @@ class Door extends React.Component {
     }
 
     render () {
-        console.log(this.props.id + " " + this.door);
         return (
           <Entity events={{ mouseenter: this.enter.bind(this), mouseleave: this.leave.bind(this) }}>
           <a-plane
