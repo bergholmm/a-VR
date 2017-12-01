@@ -20,7 +20,7 @@ class App extends React.Component {
           shelter = <Shelter nbrItems={settings.numItems}/>
         }
         else {
-          shelter = <Doors/>
+          shelter = <Doors nbrItems={settings.numItems}/>
         }
         this.state = {
           shelter: shelter
@@ -36,7 +36,7 @@ class App extends React.Component {
                 <a-assets>
                     <img id='skyTexture' src='https://ucarecdn.com/75af695e-0a70-4c64-af3b-7279d5ad916c/' alt='altprop' />
                 </a-assets>
-                <Entity primitive="a-sky" height="2048" radius="30" src="#skyTexture" theta-length="90" width="2048"/>  
+                <Entity primitive="a-sky" height="2048" radius="30" src="#skyTexture" theta-length="90" width="2048"/>
 
                 <Entity primitive='a-plane' position="0 -0.1 0" rotation="-90 0 0" width="60" height="60" color="#7BC8A4" />
                 {shelter}

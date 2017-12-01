@@ -22,7 +22,7 @@ class Doors extends Chose<Door> {
       this.colors.push(colors.splice(i, 1));
     }
 
-    this.nbr_items = 3;
+    this.nbr_items = this.props.nbrItems;
     this.next = Math.floor(Math.random() * this.nbr_items);
 
     console.log(this.next);
@@ -38,11 +38,12 @@ class Doors extends Chose<Door> {
   generateQueueDoors(nbr = 3) {
     let a = [];
     for(let i = 0 ; i < nbr ; i++) {
-      a.push(<Door position={`${(i-1)*5} 0 -6`}
+      a.push(<Door position={`${(i-((nbr-1)/2))*5} 0 -8`}
                    color={this.colors[i]}
                    getNext={this.getNext.bind(this)}
                    callback={this.callback.bind(this)}
-                   id={i}/>);
+                   id={i}
+                   status="closed"/>);
     }
 
     return a;
@@ -52,9 +53,23 @@ class Doors extends Chose<Door> {
     return this.next;
   }
 
+  hasNext() {
+    return this.next > -1;
+  }
+
   callback(id) {
     let doors = this.state.doors;
-    doors.splice(id, 1);
+    let door = <Door position={doors[id].props.position}
+                     color={doors[id].props.color}
+                     getNext={doors[id].props.getNext}
+                     callback={doors[id].props.callback}
+                     id={doors[id].props.id}
+                     status="open"/>
+
+    doors[id] = door;
+
+    this.next = -1;
+
     this.setState({
       doors: doors
     });
