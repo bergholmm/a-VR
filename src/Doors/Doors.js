@@ -25,20 +25,25 @@ class Doors extends Chose<Door> {
     this.nbr_items = this.props.nbrItems;
     this.next = Math.floor(Math.random() * this.nbr_items);
 
+    let depth = -8;
+    let height = 10;
+    this.wall = <a-plane position={`0 ${height/2} ${depth-0.01}`} width={this.nbr_items*5} height={height} color="grey"/>
+    this.text = <a-text value="METRO STATION" position={`0 ${3*height/4} ${depth}`} color="red" align="center" width='16'/>
+
     console.log(this.next);
 
     this.state = {
-      doors: this.generateQueueDoors(this.nbr_items)
+      doors: this.generateQueueDoors(this.nbr_items, depth)
     }
     //<a-obj-model src="url(door.obj)" mtl="url(door.mtl)" position="0 0.5 -6" scale='0.1 0.1 0.1'/>
 
 
   }
 
-  generateQueueDoors(nbr = 3) {
+  generateQueueDoors(nbr = 3, depth) {
     let a = [];
     for(let i = 0 ; i < nbr ; i++) {
-      a.push(<Door position={`${(i-((nbr-1)/2))*5} 0 -8`}
+      a.push(<Door position={`${(i-((nbr-1)/2))*5} 0 ${depth}`}
                    color={this.colors[i]}
                    getNext={this.getNext.bind(this)}
                    callback={this.callback.bind(this)}
@@ -78,6 +83,8 @@ class Doors extends Chose<Door> {
   render() {
     return (
       <Entity>
+        {this.wall}
+        {this.text}
         {this.state.doors}
       </Entity>
     );
