@@ -5,7 +5,7 @@ import 'babel-polyfill';
 import { Entity } from 'aframe-react';
 import React from 'react';
 import Item from './Item'
-import Chose from './chose'
+import Chose from '../chose'
 import {
     createIndexArray,
     shuffleArray,
@@ -19,7 +19,7 @@ class Shelter extends Chose<Item> {
 
     this.width = Math.ceil(Math.sqrt(props.nbrItems));
     this.height = this.width;
-    this.coeff = 1.333;
+    this.coeff = 1.3;
 
 
     let distance = 4.5;

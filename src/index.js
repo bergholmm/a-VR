@@ -6,7 +6,7 @@ import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './app';
-import { itemTypes } from './utils';
+import { itemTypes } from './Shelter/utils';
 import { frontPageSettings, frontPageSelectEnv } from './frontPage';
 
 import Slider from 'rc-slider';
@@ -25,7 +25,7 @@ class Index extends React.Component {
                 numItems: 9,
                 randomSequence: true,
                 allowedItems: ['a-box', 'a-sphere', 'a-cylinder'],
-                env: 1,
+                env: 1
             },
             started: false,
             envSelected: false,
