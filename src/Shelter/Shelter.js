@@ -21,8 +21,10 @@ class Shelter extends Chose<Item> {
     this.height = this.width;
     this.coeff = 1.3;
 
+    let distance = (typeof this.props.distance !== 'undefined') ? this.props.distance : 4.5;
 
-    let distance = 4.5;
+
+
     let depth = 1;
     let width = this.width*this.coeff;
     let height = this.height;
@@ -35,7 +37,9 @@ class Shelter extends Chose<Item> {
         getNextItem: this.getNext.bind(this),
     }
 
-    let positions = this.positionList();
+    console.log(distance);
+    let positions = this.positionList(distance);
+    console.log(positions);
 
     let listItems = generateItemList(itemProps, positions, props.nbrItems);
 
@@ -53,11 +57,11 @@ class Shelter extends Chose<Item> {
       </Entity>
     );
 
-    this.positionNext = ((width/2)+0.3) + ' 1.3 -3';
+    this.positionNext = ((width/2)+0.3) + ' 1.3 ' + (-distance+1.5);
     this.positionText = {
       x: ((width/2)+0.3),
       y: 2,
-      z: -3
+      z: -distance+1.5
     }
 
     this.state = {
@@ -66,11 +70,11 @@ class Shelter extends Chose<Item> {
     }
   }
 
-  positionList() {
+  positionList(distance) {
     let a = [];
     for(let i = this.height-1 ; i >= 0 ; i--) {
       for(let j = 0 ; j < this.width ; j++) {
-        a.push((j-((this.width-1)/2))*this.coeff + ' ' + (i+0.3) + ' -3.9');
+        a.push((j-((this.width-1)/2))*this.coeff + ' ' + (i+0.3) + ' ' + (-distance+0.6));
       }
     }
 
@@ -84,10 +88,17 @@ class Shelter extends Chose<Item> {
       queue.shift();
       console.log(items, queue);
 
+      if(!this.hasNext() && typeof this.props.callback !== "undefined") {
+        this.props.callback();
+      }
+
       this.setState( {
         items: items,
         queue: queue
       });
+  }
+
+  getNextTransition() {
   }
 
   getNext() {

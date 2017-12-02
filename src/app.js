@@ -7,8 +7,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Entity, Scene } from 'aframe-react';
 
-import Shelter from './Shelter/Shelter'
-import Doors from './Doors/Doors'
+import MySceneShelter from './Shelter/MySceneShelter'
+import MySceneDoors from './Doors/MySceneDoors'
+import SceneShelter from './SceneShelter/SceneShelter'
 
 class App extends React.Component {
     constructor(props) {
@@ -17,10 +18,12 @@ class App extends React.Component {
 
         let shelter;
         if(settings.env == 1) {
-          shelter = <Shelter nbrItems={settings.numItems}/>
+          shelter = <MySceneShelter nbrItems={settings.numItems}/>
         }
-        else {
-          shelter = <Doors nbrItems={settings.numItems}/>
+        else if(settings.env == 2){
+          shelter = <MySceneDoors nbrItems={settings.numItems}/>
+        } else {
+          shelter = <SceneShelter nbrItems={settings.numItems} />
         }
         this.state = {
           shelter: shelter
@@ -32,18 +35,7 @@ class App extends React.Component {
 
         //<Entity primitive="a-sky" height="2048" radius="30" src="#skyTexture" theta-length="90" width="2048"/>
         return (
-            <Scene inspector='url: https://aframe.io/releases/0.3.0/aframe-inspector.min.js'>
-                <a-assets>
-                    <img id='skyTexture' src='https://ucarecdn.com/75af695e-0a70-4c64-af3b-7279d5ad916c/' alt='altprop' />
-                </a-assets>
-                <Entity primitive="a-sky" height="2048" radius="30" src="#skyTexture" theta-length="90" width="2048"/>
-
-                <Entity primitive='a-plane' position="0 -0.1 0" rotation="-90 0 0" width="60" height="60" color="#7BC8A4" />
-                {shelter}
-                <Entity primitive='a-camera'>
-                    <Entity primitive='a-cursor' />
-                </Entity>
-            </Scene>
+            shelter
         );
     }
 }

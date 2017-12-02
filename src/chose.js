@@ -9,6 +9,7 @@ class Chose<T> extends React.Component {
   hasNext() {}
   getNext() {}
   render() {}
+  getNextTransition() {}
 }
 
 export default Chose;

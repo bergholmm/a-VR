@@ -54,6 +54,8 @@ class Doors extends Chose<Door> {
     return a;
   }
 
+  getNextTransition(){}
+
   getNext() {
     return this.next;
   }
