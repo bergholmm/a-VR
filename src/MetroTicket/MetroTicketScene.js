@@ -13,8 +13,10 @@ class MetroTicketScene extends ActionScene<TicketMachine> {
 
   constructor(props) {
     super(props);
-    this.colors = this.generateColors();
+
     this.next = Math.floor(Math.random()*this.props.nbrItems);
+    this.colors = this.generateColors();
+    this.colorsDoors = this.generateColorsDoors(3);
 
     console.log(this.colors[this.next]);
 
@@ -25,9 +27,9 @@ class MetroTicketScene extends ActionScene<TicketMachine> {
                                   rotation='0 180 0'
                                   callback={this.callback.bind(this)}/>
 
-    this.doors = <Doors nbrItems={this.props.nbrItems}
-                        generateColors={this.deterministicGenerateColors.bind(this)}
-                        next={this.next} />;
+    this.doors = <Doors nbrItems={3}
+                        generateColors={this.deterministicGenerateColorsDoors.bind(this)}
+                        next={this.colorsDoorsNext} />;
 
     this.events = this.generateEvents();
     this.i = 1;
@@ -63,6 +65,10 @@ class MetroTicketScene extends ActionScene<TicketMachine> {
     return this.colors;
   }
 
+  deterministicGenerateColorsDoors() {
+    return this.colorsDoors;
+  }
+
   generateColors() {
 
     let colors = ["#ff0000", "#00ff00", "#0000ff", '#ffff00', '#ff00ff', '#00ffff', '#660033', "#660066", '#336600', '#ff6600', '#4d1919'];
@@ -74,6 +80,24 @@ class MetroTicketScene extends ActionScene<TicketMachine> {
     }
 
     return colors2;
+  }
+
+  generateColorsDoors(n) {
+    let colors2 = this.generateColors();
+    let colors = [];
+
+    for(let i = 0  ; i < n-1 ; i++) {
+      if(colors2[i] === this.colors)
+        i++;
+      colors.push(colors2[i]);
+    }
+
+    this.colorsDoorsNext = Math.floor(Math.random()*n);
+    colors.splice(this.colorsDoorsNext, 0, this.colors[this.next]);
+
+    console.log(colors);
+
+    return colors;
   }
 
   render() {

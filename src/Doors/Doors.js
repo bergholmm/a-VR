@@ -26,7 +26,7 @@ class Doors extends Chose<Door> {
       this.colors = this.props.generateColors();
 
     this.nbr_items = this.props.nbrItems;
-    this.next = (typeof this.props.next === "undefined") ? Math.floor(Math.random() * this.nbr_items) : this.props.next;
+    this.next = (typeof this.props.next === "undefined") ? Math.floor(Math.random() * this.nbr_items) : parseInt(this.props.next);
 
     let depth = -8;
     let height = 10;
@@ -46,6 +46,7 @@ class Doors extends Chose<Door> {
   generateQueueDoors(nbr = 3, depth) {
     let a = [];
     for(let i = 0 ; i < nbr ; i++) {
+      console.log(this.colors[i]);
       a.push(<Door position={`${(i-((nbr-1)/2))*5} 0 ${depth}`}
                    color={this.colors[i]}
                    getNext={this.getNext.bind(this)}
@@ -91,7 +92,7 @@ class Doors extends Chose<Door> {
     let text = null;
     if(this.hasNext()) {
 
-    console.log((this.nbr_items-1)*5/2);
+    console.log((this.nbr_items+0.5)*5/2);
     text = <Entity text={{value: 'Next:', align: 'center', width: 8}} position={`${(this.nbr_items+0.5)*5/2} 3 -8`}/>
     next = <Entity
                   primitive="a-plane"
@@ -100,6 +101,8 @@ class Doors extends Chose<Door> {
                   height="1"
                   color={this.state.doors[this.next].props.color} />
     }
+
+    console.log(next);
 
     return (
       <Entity>

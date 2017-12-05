@@ -133,11 +133,18 @@ class TicketMachine extends Chose<Ticket> {
   }
 
   render() {
+
+    let next = null;
+
+    if(this.hasNext())
+      next = <Entity primitive='a-plane' width='0.5' height='0.5' position={`1.5 ${3.07+this.position[1]} ${this.position[2]+1.01}`}
+          color={this.state.items[this.state.next].props.color}/>
     return (
       <Entity rotation={this.props.rotation} position={this.props.position}>
         {this.machine}
         <a-plane position={`${this.position[0]} ${3.07+this.position[1]} ${this.position[2]+1.01}`} color='white' width='1.9' height='1.45' />
         {this.state.items}
+        {next}
       </Entity>
     );
   }
