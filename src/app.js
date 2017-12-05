@@ -10,6 +10,7 @@ import { Entity, Scene } from 'aframe-react';
 import MySceneShelter from './Shelter/MySceneShelter'
 import MySceneDoors from './Doors/MySceneDoors'
 import SceneShelter from './SceneShelter/SceneShelter'
+import MetroTicketScene from './MetroTicket/MetroTicketScene'
 
 class App extends React.Component {
     constructor(props) {
@@ -21,7 +22,7 @@ class App extends React.Component {
           shelter = <MySceneShelter nbrItems={settings.numItems}/>
         }
         else if(settings.env == 2){
-          shelter = <MySceneDoors nbrItems={settings.numItems}/>
+          shelter = <MetroTicketScene nbrItems={settings.numItems}/>
         } else {
           shelter = <SceneShelter nbrItems={settings.numItems} />
         }

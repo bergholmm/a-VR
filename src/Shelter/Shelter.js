@@ -52,7 +52,7 @@ class Shelter extends Chose<Item> {
       <Entity>
       <Entity primitive='a-plane' position={`0 ${height/2} ${-distance}`} rotation='0 0 0' width={width} height={height} color='brown' />
       <Entity primitive='a-plane' position={`0 ${height/2} ${-distance}`} rotation='0 180 0' width={width} height={height} color='brown' />
-      
+        
       <Entity primitive='a-plane' position={`${width/2} ${height/2} ${-distance+depth/2}`} rotation='0 -90 0' width={depth} height={height} color='brown' />
       <Entity primitive='a-plane' position={`${width/2} ${height/2} ${-distance+depth/2}`} rotation='0 90 0' width={depth} height={height} color='brown' />
 
