@@ -27,9 +27,11 @@ class MetroTicketScene extends ActionScene<TicketMachine> {
                                   rotation='0 180 0'
                                   callback={this.callback.bind(this)}/>
 
-    this.doors = <Doors nbrItems={3}
+    this.nbrDoor = 3;
+    this.doors = <Doors nbrItems={this.nbrDoor}
                         generateColors={this.deterministicGenerateColorsDoors.bind(this)}
-                        next={this.colorsDoorsNext} />;
+                        next={this.colorsDoorsNext}
+                        callback={this.callback.bind(this)}/>;
 
     this.events = this.generateEvents();
     this.i = 1;
@@ -44,7 +46,7 @@ class MetroTicketScene extends ActionScene<TicketMachine> {
     e.push(<a-animation attribute="position"
           dur="1000"
           easing="linear"
-          to="0 3 5" />)
+          to="0 3 5" />);
     e.push(<a-animation attribute="rotation"
           dur="500"
           easing="linear"
@@ -52,13 +54,29 @@ class MetroTicketScene extends ActionScene<TicketMachine> {
           id={`event1`}
           begin={`event1`}></a-animation>);
 
+    for(let i = 0 ; i < this.nbrDoor ; i++) {
+      e.push(<a-animation attribute="position"
+                dur="1000"
+                easing="linear"
+                to={`${(i-((this.nbrDoor-1)/2))*5} 1.6 -8.5`}
+                begin={`door${i}`} />);
+    }
+
     return e;
   }
 
-  callback() {
+  callback(id) {
+
+    console.log(id);
+
     let camera = document.getElementById("camera");
     let i = this.i;
-    camera.emit("event"+i);
+    if(i === 1)
+      camera.emit("event"+i);
+    else
+      camera.emit("door"+id)
+
+    this.i++;
   }
 
   deterministicGenerateColors() {

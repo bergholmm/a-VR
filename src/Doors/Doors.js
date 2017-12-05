@@ -58,8 +58,6 @@ class Doors extends Chose<Door> {
     return a;
   }
 
-  getNextTransition(){}
-
   getNext() {
     return this.next;
   }
@@ -69,6 +67,10 @@ class Doors extends Chose<Door> {
   }
 
   callback(id) {
+
+    if(typeof this.props.callback !== "undefined")
+      this.props.callback(id);
+
     let doors = this.state.doors;
     let door = <Door position={doors[id].props.position}
                      color={doors[id].props.color}
@@ -101,8 +103,6 @@ class Doors extends Chose<Door> {
                   height="1"
                   color={this.state.doors[this.next].props.color} />
     }
-
-    console.log(next);
 
     return (
       <Entity>

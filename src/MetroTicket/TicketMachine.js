@@ -69,13 +69,12 @@ class TicketMachine extends Chose<Ticket> {
   }
 
   callback(id) {
-    console.log("Hourra, finito");
     this.setState({
       items: this.state.items,
       next: -1
     });
     if(typeof this.props.callback != "undefined")
-      this.props.callback();
+      this.props.callback(id);
 
   }
 
