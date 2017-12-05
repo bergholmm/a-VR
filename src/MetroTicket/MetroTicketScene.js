@@ -22,17 +22,41 @@ class MetroTicketScene extends ActionScene<TicketMachine> {
                                   nbrItems={this.props.nbrItems}
                                   generateColors={this.deterministicGenerateColors.bind(this)}
                                   next={this.next}
-                                  rotation='0 180 0'/>
+                                  rotation='0 180 0'
+                                  callback={this.callback.bind(this)}/>
 
     this.doors = <Doors nbrItems={this.props.nbrItems}
                         generateColors={this.deterministicGenerateColors.bind(this)}
                         next={this.next} />;
 
     this.events = this.generateEvents();
+    this.i = 1;
   }
 
   generateEvents() {
-    
+    let e = [];
+    e.push(<a-animation attribute="rotation"
+          dur="500"
+          easing="linear"
+          to="0 180 0"></a-animation>);
+    e.push(<a-animation attribute="position"
+          dur="1000"
+          easing="linear"
+          to="0 3 5" />)
+    e.push(<a-animation attribute="rotation"
+          dur="500"
+          easing="linear"
+          to="0 0 0"
+          id={`event1`}
+          begin={`event1`}></a-animation>);
+
+    return e;
+  }
+
+  callback() {
+    let camera = document.getElementById("camera");
+    let i = this.i;
+    camera.emit("event"+i);
   }
 
   deterministicGenerateColors() {
@@ -64,6 +88,7 @@ class MetroTicketScene extends ActionScene<TicketMachine> {
           {this.doors}
           <Entity primitive='a-plane' position="0 -0.1 0" rotation="-90 0 0" width="60" height="60" color="#7BC8A4" />
           <Entity primitive='a-camera' id="camera" position='0 1.8 0'>
+              {this.events}
               <Entity primitive='a-cursor' />
           </Entity>
       </Scene>
