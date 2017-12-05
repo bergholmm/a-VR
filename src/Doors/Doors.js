@@ -22,8 +22,11 @@ class Doors extends Chose<Door> {
       this.colors.push(colors.splice(i, 1));
     }
 
+    if(typeof this.props.generateColors !== "undefined")
+      this.colors = this.props.generateColors();
+
     this.nbr_items = this.props.nbrItems;
-    this.next = Math.floor(Math.random() * this.nbr_items);
+    this.next = (typeof this.props.next === "undefined") ? Math.floor(Math.random() * this.nbr_items) : this.props.next;
 
     let depth = -8;
     let height = 10;

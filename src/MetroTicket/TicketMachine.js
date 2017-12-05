@@ -6,8 +6,9 @@ import { Entity } from 'aframe-react';
 import React from 'react';
 
 import Chose from '../chose';
+import Ticket from "./Ticket";
 
-class TicketMachine extends Chose<Entity> {
+class TicketMachine extends Chose<Ticket> {
 
   constructor(props) {
     super(props);
@@ -15,11 +16,13 @@ class TicketMachine extends Chose<Entity> {
     this.machine = <a-obj-model
         src={`url(ticket_machine.obj)`}
         mtl={`url(ticket_machine.mtl)`}
-        position={this.props.position}
+        position="0 0 0"
         scale='0.05 0.05 0.05'
       />
 
-      this.nbrItems = 3;
+      this.position = [0, 0, 0];
+
+      this.nbrItems = this.props.nbrItems;
 
 
       this.exploitable_x = 1.9;
@@ -31,29 +34,33 @@ class TicketMachine extends Chose<Entity> {
       this.bloc_width = this.exploitable_x/this.dimensions_x;
       this.bloc_height = this.exploitable_y/this.dimensions_y;
 
-      this.depth = -2.98;
+      let next = (typeof this.props.next === "undefined") ? Math.floor(Math.random()*this.nbrItems) : this.props.next;
 
       this.state = {
-        items: this.generateItems(this.depth)
+        items: this.generateItems(),
+        next: next
       }
 
   }
 
   generateItems(depth) {
     let colors = this.generateColors();
-    let positions = this.generatePositions(depth);
+    let positions = this.generatePositions();
 
     console.log(positions);
 
     let items = [];
     for(let i = 0 ; i < this.nbrItems ; i++) {
       items.push(
-        <Entity
+        <Ticket
           position={positions[i]}
           color={colors[i]}
           primitive='a-plane'
           width={this.bloc_width - 0.1}
           height={this.bloc_height- 0.1}
+          id={i}
+          getNext={this.getNext.bind(this)}
+          callback={this.callback.bind(this)}
         />
       );
     }
@@ -61,13 +68,29 @@ class TicketMachine extends Chose<Entity> {
     return items;
   }
 
+  callback(id) {
+    console.log("Hourra, finito");
+    this.setState({
+      items: this.state.items,
+      next: -1
+    });
+    if(typeof this.props.callback != "undefined")
+      this.props.callback();
+
+  }
+
   getNext() {
-    if(typeof this.next === "undefined")
-      this.next = Math.floor(Math.random()*this.nbrItems)
-    return this.next;
+    return this.state.next;
+  }
+
+  hasNext() {
+    return this.state.next !== -1;
   }
 
   generateColors() {
+    if(typeof this.props.generateColors !== "undefined")
+      return this.props.generateColors();
+
     let colors = ["#ff0000", "#00ff00", "#0000ff", '#ffff00', '#ff00ff', '#00ffff', '#660033', "#660066", '#336600', '#ff6600', '#4d1919'];
     let colors2 = [];
 
@@ -96,13 +119,13 @@ class TicketMachine extends Chose<Entity> {
    *  - Bottom-left = -0.95, 2.975
    *  - Bottom-right = 0.95, 2.975
    */
-  generatePositions(depth) {
+  generatePositions() {
     let positions = [];
-    for(let i = 0 ; i < this.dimensions_x ; i++) {
-      let temp_x = ((i+0.5)*this.bloc_width)-this.exploitable_x/2;
-      for(let j = this.dimensions_y-1 ; j >= 0 ; j--) {
-        let temp_y = ((j+0.5)*this.bloc_height)+3.07-this.exploitable_y/2;
-        positions.push(temp_x+" "+temp_y+" "+depth);
+    for(let j = this.dimensions_y-1 ; j >= 0 ; j--) {
+      let temp_y = ((j+0.5)*this.bloc_height)+3.07-this.exploitable_y/2 + this.position[1];
+      for(let i = 0 ; i < this.dimensions_x ; i++) {
+        let temp_x = ((i+0.5)*this.bloc_width)-this.exploitable_x/2 + this.position[0];
+        positions.push(temp_x+" "+temp_y+" "+(this.position[2]+1.02));
       }
     }
 
@@ -111,9 +134,9 @@ class TicketMachine extends Chose<Entity> {
 
   render() {
     return (
-      <Entity>
+      <Entity rotation={this.props.rotation} position={this.props.position}>
         {this.machine}
-        <a-plane position='0 3.07 -2.99' color='white' width='1.9' height='1.45' />
+        <a-plane position={`${this.position[0]} ${3.07+this.position[1]} ${this.position[2]+1.01}`} color='white' width='1.9' height='1.45' />
         {this.state.items}
       </Entity>
     );
