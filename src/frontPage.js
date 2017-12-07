@@ -11,7 +11,7 @@ export const frontPageSelectEnv = (props) => {
                 <div className="hero-body">
                   <div className="container">
                     <div className="header-titles">
-                      <h3 className="title is-3 is-spaced">App Name Here</h3>
+                      <h3 className="title is-3 is-spaced">A-VR</h3>
                       <h5 className="subtitle is-5 is-spaced">A web VR game</h5>
                     </div>
                     <div className="header-buttons">
@@ -59,7 +59,7 @@ export const frontPageSettings = (props) => {
                 <div className="hero-body">
                   <div className="container">
                     <div className="header-titles">
-                      <h3 className="title is-3 is-spaced">App Name Here</h3>
+                      <h3 className="title is-3 is-spaced">A-VR</h3>
                       <h5 className="subtitle is-5 is-spaced">A web VR game</h5>
                     </div>
                     <div className="header-buttons">
@@ -79,11 +79,6 @@ export const frontPageSettings = (props) => {
                                     <text> Number of items</text>
                                     <Slider max={ 20 } defaultValue={ 9 } handle={ props.handle } onAfterChange={ props.updateSliderState }/>
                                 </div>
-                                <label className="checkbox">
-                                    <input onClick={ props.setRandomSeq } className='radioEnv' type="checkbox" checked={ props.settings.randomSequence }/>
-                                    Random sequence
-                                    {'  //TODO if manual seq selected -> show options for it'}
-                                </label>
                                 <div className='slider-container'>
                                     { props.availableItems }
                                 </div>
