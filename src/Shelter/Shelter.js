@@ -5,7 +5,7 @@ import 'babel-polyfill';
 import { Entity } from 'aframe-react';
 import React from 'react';
 import Item from './Item'
-import Chose from '../chose'
+import Chose from '../ActionScene/chose'
 import {
     createIndexArray,
     shuffleArray,

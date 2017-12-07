@@ -2,18 +2,12 @@ import 'aframe';
 import 'aframe-animation-component';
 import 'aframe-particle-system-component';
 import 'babel-polyfill';
+import './LandingPage/style.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './app';
-import { itemTypes } from './Shelter/utils';
-import { frontPageSettings, frontPageSelectEnv } from './frontPage';
-
-import Slider from 'rc-slider';
-import Tooltip from 'rc-tooltip';
-const createSliderWithTooltip = Slider.createSliderWithTooltip;
-const Range = createSliderWithTooltip(Slider.Range);
-const Handle = Slider.Handle;
+import SelectScene from './LandingPage/SelectScene';
+import SelectSettings from './LandingPage/SelectSettings.js';
 
 
 class Index extends React.Component {
@@ -21,130 +15,55 @@ class Index extends React.Component {
         super(props);
 
         this.state = {
-            settings: {
-                numItems: 9,
-                randomSequence: true,
-                allowedItems: ['a-box', 'a-sphere', 'a-cylinder'],
-                env: 1
-            },
+            scene: null,
             started: false,
-            envSelected: false,
         };
 
     }
-    selectEnv(env) {
-        let { settings } = this.state;
-        settings.env = env;
-
+    selectScene(scene) {
         this.setState({
-            settings,
-            envSelected: true,
+            scene,
         });
     }
-    start() {
+    start(scene) {
+        console.log(scene);
         this.setState({
             started: true,
+            scene,
         });
     }
     back() {
         this.setState({
-            envSelected: false,
-        });
-    }
-    handle(props) {
-        const { value, dragging, index, ...restProps } = props;
-        return (
-            <Tooltip
-            prefixCls="rc-slider-tooltip"
-            overlay={value}
-            visible={dragging}
-            placement="top"
-            key={index}
-            >
-            <Handle value={value} {...restProps} />
-            </Tooltip>
-        );
-    }
-    updateSliderState(value) {
-        let { settings } = this.state;
-        settings.numItems = value;
-        this.setState({
-            settings,
-        });
-    }
-    setRandomSeq() {
-        const { settings: { randomSequence } } = this.state;
-        let { settings } = this.state;
-
-        settings.randomSequence = !randomSequence;
-
-        this.setState({
-            settings,
-        });
-    }
-    setItem(itemName) {
-        let { settings } = this.state;
-
-        const index = settings.allowedItems.indexOf(itemName);
-
-        if (index === -1) {
-            settings.allowedItems.push(itemName);
-        } else {
-            settings.allowedItems.splice(index, 1);
-        }
-
-        this.setState({
-            settings,
+            scene: null,
         });
     }
     render () {
-        const { started, envSelected, settings } = this.state;
+        const { scene, started } = this.state;
         let content = <div></div>;
-        console.log(settings)
-
-        const availableItemsText = settings.allowedItems.reduce((prev, next) => prev + next + ' ', '');
-        const availableItems = itemTypes.map((itemName, i) => {
-            const index = settings.allowedItems.indexOf(itemName);
-            let checked = true;
-
-            if (index === -1) {
-                checked = false;
-            }
-            return (
-                <label className="checkbox">
-                    <input key={i} onClick={ () => this.setItem(itemName) } className='radioEnv' type="checkbox" checked={ checked }/>
-                {itemName}
-                </label>
-            );
-        });
 
         if ( started ) {
+            const Scene = scene.component;
             content = (
-                <App settings={ settings }/>
+                <Scene { ...scene.props }/>
             );
         }
-        else if ( envSelected ) {
-            const props = {
-                start: this.start.bind(this),
-                back: this.back.bind(this),
-                handle: this.handle.bind(this),
-                updateSliderState: this.updateSliderState.bind(this),
-                setRandomSeq: this.setRandomSeq.bind(this),
-                settings,
-                availableItems,
-                availableItemsText,
-            };
-            content = frontPageSettings(props);
+        else if ( scene !== null ) {
+            content = (
+                <SelectSettings
+                    scene={ scene }
+                    back={ this.back.bind(this) }
+                    start={ this.start.bind(this) }
+                />
+            );
         } else {
-            const props = {
-                setEnv: this.selectEnv.bind(this),
-            };
-            content = frontPageSelectEnv(props);
+            content = (
+                <SelectScene selectScene={ this.selectScene.bind(this) }/>
+            );
         }
 
         return (
-            <div>
-                {content}
+            <div id='body' >
+                { content }
             </div>
         );
     }

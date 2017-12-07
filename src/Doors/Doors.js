@@ -4,7 +4,7 @@ import 'aframe-particle-system-component';
 import 'babel-polyfill';
 import { Entity } from 'aframe-react';
 import React from 'react';
-import Chose from '../chose'
+import Chose from '../ActionScene/chose'
 import Door from './Door'
 
 class Doors extends Chose<Door> {
