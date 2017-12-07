@@ -1,7 +1,7 @@
 import { itemTypes } from './Shelter/utils';
 
 import MySceneShelter from './Shelter/MySceneShelter'
-import MySceneDoors from './Doors/MySceneDoors'
+import MetroTicketScene from './MetroTicket/MetroTicketScene'
 import SceneShelter from './SceneShelter/SceneShelter'
 
 
@@ -37,10 +37,10 @@ export const mySceneShelterProps = {
     },
 };
 
-export const mySceneDoorsProps = {
-    id: 'mySceneDoors',
-    name: 'Doors Scenario',
-    component: MySceneDoors,
+export const MetroTicketSceneProps = {
+    id: 'metroTickerScene',
+    name: 'Metro Scenario',
+    component: MetroTicketScene,
     props: {
         nbrItems: 4,
     },
@@ -48,7 +48,7 @@ export const mySceneDoorsProps = {
         nbrItems: {
             type: 'slider',
             id: 'nbrItems',
-            description: 'Number of doors',
+            description: 'Number of lines',
             min: 1,
             max: 10,
             initial: 4,
@@ -92,4 +92,4 @@ export const sceneShelterProps = {
     },
 };
 
-export const sceneProps = [mySceneShelterProps, mySceneDoorsProps, sceneShelterProps];
+export const sceneProps = [mySceneShelterProps, MetroTicketSceneProps, sceneShelterProps];

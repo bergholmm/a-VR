@@ -5,7 +5,7 @@ import 'babel-polyfill';
 import { Entity } from 'aframe-react';
 import React from 'react';
 
-import Chose from '../chose';
+import Chose from '../ActionScene/chose';
 import Ticket from "./Ticket";
 
 class TicketMachine extends Chose<Ticket> {
