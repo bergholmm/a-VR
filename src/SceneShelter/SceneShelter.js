@@ -14,7 +14,7 @@ class SceneShelter extends ActionScene<Shelter> {
     super(props);
 
     this.shelters = [];
-    this.nbr_scene = 3;
+    this.nbr_scene = props.nbrScene;
     this.current = 0;
 
     this.animations = this.createAnimations();

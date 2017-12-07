@@ -30,6 +30,7 @@ export const generateItemList = (props, itemPositions, length = 9) => {
         let typ = itemTypes[Math.floor(Math.random()*itemTypes.length)];
         let col =  itemColors2[Math.floor(Math.random()*itemColors2.length)];
 
+        // eslint-disable-next-line
         while(items.filter(e => e.props.primitive === typ && e.props.color === col).length > 0) {
           typ = itemTypes[Math.floor(Math.random()*itemTypes.length)];
           col =  itemColors2[Math.floor(Math.random()*itemColors2.length)];

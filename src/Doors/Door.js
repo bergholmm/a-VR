@@ -11,7 +11,6 @@ class Door extends React.Component {
 
         let position = props.position.split(" ");
         this.color_position = position[0]+" 4 "+position[2];
-        let door = null;
         if(props.status === "closed") {
           this.door = "door";
         } else if (props.status === "open") {
