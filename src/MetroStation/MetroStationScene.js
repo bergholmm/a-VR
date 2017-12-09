@@ -7,6 +7,7 @@ import React from 'react';
 
 import ActionScene from '../ActionScene/ActionScene';
 import TicketMachine from "../MetroTicket/TicketMachine";
+import Turnstile from './Turnstile';
 
 class MetroStationScene extends ActionScene<Entity> {
 
@@ -19,12 +20,11 @@ class MetroStationScene extends ActionScene<Entity> {
         position="0 0 0"
       />
 
-      this.tourniquet=<a-obj-model
-        src={`url(tourniquet.obj)`}
-        mtl={`url(metro_station.mtl)`}
+      this.tourniquet = <Turnstile
         position="6 9.9 -16"
         rotation="0 45 0"
-        scale="0.02 0.02 0.02"/>
+        activated={this.turnstile_activated.bind(this)}
+        callback={this.turnstile_callback.bind(this)}/>
 
       this.ticket_machine = <TicketMachine position="19 9.9 0"
                               nbrItems={this.props.nbrItems}
@@ -32,16 +32,62 @@ class MetroStationScene extends ActionScene<Entity> {
                               callback={this.ticket_machine_callback.bind(this)}/>
       this.events = [];
       this.events.push(<a-animation attribute="position"
-            dur="1000"
+            dur="2000"
             easing="linear"
             to="16 12.8 0"
             begin="ticket_machine_done"/>);
+
+      this.events.push(<a-animation attribute="rotation"
+            dur="500"
+            easing="linear"
+            to="0 45 0"
+            begin="ticket_bought"/>);
+      this.events.push(<a-animation attribute="position"
+            dur="1500"
+            easing="linear"
+            to="3 12.8 -19"
+            begin="turnstile_spotted0"
+            id="turnstile_spotted0"/>);
+      this.events.push(<a-animation attribute="rotation"
+            dur="500"
+            easing="linear"
+            to="0 0 0"
+            begin="turnstile_spotted1"
+            id="turnstile_spotted1"/>);
+      this.events.push(<a-animation attribute="position"
+            dur="2000"
+            easing="linear"
+            to="3 4.8 -29"
+            begin="turnstile_spotted2"
+            id="turnstile_spotted2"/>);
+
+
+      this.step = 0;
   }
 
   ticket_machine_callback(id) {
     let camera = document.getElementById("camera");
     if(id == -1)
       camera.emit("ticket_machine_done");
+    else {
+      this.step = 1;
+      camera.emit("ticket_bought");
+    }
+  }
+
+  turnstile_callback() {
+    let camera = document.getElementById("camera");
+    for(let i = 0 ; i < 2 ; i++) {
+      let event = document.getElementById("turnstile_spotted"+i);
+      event.addEventListener('animationend', () => camera.emit("turnstile_spotted"+(i+1)));
+    }
+
+    camera.emit("turnstile_spotted0");
+
+  }
+
+  turnstile_activated() {
+    return this.step === 1;
   }
 
   render() {
