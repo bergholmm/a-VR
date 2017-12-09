@@ -8,6 +8,7 @@ import React from 'react';
 import ActionScene from '../ActionScene/ActionScene';
 import TicketMachine from "../MetroTicket/TicketMachine";
 import Turnstile from './Turnstile';
+import MetroTrain from './MetroTrain/MetroTrain';
 
 class MetroStationScene extends ActionScene<Entity> {
 
@@ -30,6 +31,11 @@ class MetroStationScene extends ActionScene<Entity> {
                               nbrItems={this.props.nbrItems}
                               rotation="0 -90 0"
                               callback={this.ticket_machine_callback.bind(this)}/>
+
+      this.train = <MetroTrain position="0 0 0" callback={this.train_callback.bind(this)}/>
+      console.log(this.train);
+
+
       this.events = [];
       this.events.push(<a-animation attribute="position"
             dur="2000"
@@ -57,17 +63,51 @@ class MetroStationScene extends ActionScene<Entity> {
       this.events.push(<a-animation attribute="position"
             dur="2000"
             easing="linear"
-            to="3 4.8 -29"
+            to="3 3.8 -29"
             begin="turnstile_spotted2"
             id="turnstile_spotted2"/>);
-
+      this.events.push(<a-animation attribute='position'
+            dur='1000'
+            easing='linear'
+            to="5 3.8 -33"
+            begin="getin0"
+            id="getin0"/>);
+      this.events.push(<a-animation attribute="rotation"
+            dur="500"
+            easing="linear"
+            to="0 -90 0"
+            begin="getin1"
+            id="getin1"/>);
+      this.events.push(<a-animation attribute='position'
+            dur='1000'
+            easing='linear'
+            to="10 3.8 -33"
+            begin="getin2"
+            id="getin2"/>);
+      this.events.push(<a-animation attribute='position'
+            dur='5000'
+            easing='linear'
+            to='10 3.8 -73'
+            begin='end'/>);
 
       this.step = 0;
+
+      this.events_train = [];
+      this.events_train.push(<a-animation attribute="position"
+            dur="5000"
+            easing="linear"
+            to="10 0.7 -50"
+            begin="metro"/>);
+      this.events_train.push(<a-animation attribute="position"
+            dur='5000'
+            easing='linear'
+            to='10 0.7 -90'
+            begin='end'/>);
   }
 
   ticket_machine_callback(id) {
     let camera = document.getElementById("camera");
-    if(id == -1)
+    if(id === -1)
       camera.emit("ticket_machine_done");
     else {
       this.step = 1;
@@ -77,13 +117,33 @@ class MetroStationScene extends ActionScene<Entity> {
 
   turnstile_callback() {
     let camera = document.getElementById("camera");
+    let metro = document.getElementById("metro");
     for(let i = 0 ; i < 2 ; i++) {
       let event = document.getElementById("turnstile_spotted"+i);
       event.addEventListener('animationend', () => camera.emit("turnstile_spotted"+(i+1)));
     }
+    let event = document.getElementById("turnstile_spotted2");
+    event.addEventListener('animationend', () => metro.emit("metro"));
 
     camera.emit("turnstile_spotted0");
 
+  }
+
+  train_callback() {
+    let camera = document.getElementById("camera");
+    let metro = document.getElementById('metro');
+    for(let i = 0 ; i < 2 ; i++) {
+      let event = document.getElementById("getin"+i);
+      event.addEventListener('animationend', () => camera.emit("getin"+(i+1)));
+    }
+
+    let event = document.getElementById("getin2");
+    event.addEventListener('animationend', () => {
+      camera.emit("end");
+      metro.emit("end");
+    });
+
+    camera.emit("getin0");
   }
 
   turnstile_activated() {
@@ -101,6 +161,10 @@ class MetroStationScene extends ActionScene<Entity> {
           {this.station}
           {this.ticket_machine}
           {this.tourniquet}
+          <Entity position='10 0.7 0' id='metro'>
+            {this.events_train}
+            {this.train}
+          </Entity>
           <Entity primitive='a-plane' position="0 -0.1 0" rotation="-90 0 0" width="200" height="200" color="#505050" />
           <Entity primitive='a-camera' id="camera" position='0 10.8 10'>
               {this.events}
