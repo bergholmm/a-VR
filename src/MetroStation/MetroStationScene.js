@@ -19,6 +19,13 @@ class MetroStationScene extends ActionScene<Entity> {
         position="0 0 0"
       />
 
+      this.tourniquet=<a-obj-model
+        src={`url(tourniquet.obj)`}
+        mtl={`url(metro_station.mtl)`}
+        position="6 9.9 -16"
+        rotation="0 45 0"
+        scale="0.02 0.02 0.02"/>
+
       this.ticket_machine = <TicketMachine position="19 9.9 0"
                               nbrItems={this.props.nbrItems}
                               rotation="0 -90 0"
@@ -29,7 +36,6 @@ class MetroStationScene extends ActionScene<Entity> {
             easing="linear"
             to="16 12.8 0"
             begin="ticket_machine_done"/>);
-
   }
 
   ticket_machine_callback(id) {
@@ -48,6 +54,7 @@ class MetroStationScene extends ActionScene<Entity> {
       <Entity primitive="a-sky" height="2048" radius="100" src="#skyTexture" theta-length="90" width="2048"/>
           {this.station}
           {this.ticket_machine}
+          {this.tourniquet}
           <Entity primitive='a-plane' position="0 -0.1 0" rotation="-90 0 0" width="200" height="200" color="#505050" />
           <Entity primitive='a-camera' id="camera" position='0 10.8 10'>
               {this.events}
