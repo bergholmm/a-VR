@@ -41,6 +41,8 @@ class TicketMachine extends Chose<Ticket> {
         next: next
       }
 
+      this.choice_component = true;
+
   }
 
   generateItems(depth) {
@@ -61,11 +63,16 @@ class TicketMachine extends Chose<Ticket> {
           id={i}
           getNext={this.getNext.bind(this)}
           callback={this.callback.bind(this)}
+          activated={this.activated.bind(this)}
         />
       );
     }
 
     return items;
+  }
+
+  activated() {
+    return this.choice_component === false;
   }
 
   callback(id) {
@@ -131,6 +138,23 @@ class TicketMachine extends Chose<Ticket> {
     return positions;
   }
 
+  enter() {
+
+    console.log(this.choice_component);
+
+    if(this.choice_component === false)
+      return;
+
+      this.timer = setTimeout(() => {
+        this.props.callback(-1);
+        this.choice_component = false;
+      }, 1000);
+  }
+
+  leave() {
+    clearTimeout(this.timer);
+  }
+
   render() {
 
     let next = null;
@@ -139,7 +163,8 @@ class TicketMachine extends Chose<Ticket> {
       next = <Entity primitive='a-plane' width='0.5' height='0.5' position={`1.5 ${3.07+this.position[1]} ${this.position[2]+1.01}`}
           color={this.state.items[this.state.next].props.color}/>
     return (
-      <Entity rotation={this.props.rotation} position={this.props.position}>
+      <Entity rotation={this.props.rotation} position={this.props.position}
+        events={{ mouseenter: this.enter.bind(this), mouseleave: this.leave.bind(this) }}>
         {this.machine}
         <a-plane position={`${this.position[0]} ${3.07+this.position[1]} ${this.position[2]+1.01}`} color='white' width='1.9' height='1.45' />
         {this.state.items}

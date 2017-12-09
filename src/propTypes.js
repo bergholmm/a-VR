@@ -1,9 +1,8 @@
 import { itemTypes } from './Shelter/utils';
 
 import MySceneShelter from './Shelter/MySceneShelter'
-import MetroTicketScene from './MetroTicket/MetroTicketScene'
+import MetroStationScene from './MetroStation/MetroStationScene'
 import SceneShelter from './SceneShelter/SceneShelter'
-
 
 export const types = ['slider', 'selectList'];
 
@@ -37,10 +36,10 @@ export const mySceneShelterProps = {
     },
 };
 
-export const MetroTicketSceneProps = {
-    id: 'metroTickerScene',
+export const MetroStationSceneProps = {
+    id: 'metroStationScene',
     name: 'Metro Scenario',
-    component: MetroTicketScene,
+    component: MetroStationScene,
     props: {
         nbrItems: 4,
     },
@@ -92,4 +91,4 @@ export const sceneShelterProps = {
     },
 };
 
-export const sceneProps = [mySceneShelterProps, MetroTicketSceneProps, sceneShelterProps];
+export const sceneProps = [mySceneShelterProps, MetroStationSceneProps, sceneShelterProps];

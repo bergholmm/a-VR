@@ -25,6 +25,8 @@ class Item extends React.Component {
     }
 
     enter() {
+      if(this.props.activated() === false)
+        return;
       const nextItem = this.props.getNext();
       if(nextItem === this.state.id) {
           this.setState({
