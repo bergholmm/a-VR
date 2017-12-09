@@ -60,6 +60,9 @@ class MetroStationScene extends ActionScene<Entity> {
               {this.events}
               <Entity primitive='a-cursor' />
           </Entity>
+          <a-light type='point' position='-2 20 0' intensity="0.4" rotation="-90 0 0"/>
+          <a-light type='point' position='-2 15 -26' intensity="0.4" rotation="-90 0 0"/>
+          <a-light type='ambient' intensity='0.2'/>
       </Scene>
     );
   }
