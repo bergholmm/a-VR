@@ -15,6 +15,9 @@ class MetroStationScene extends ActionScene<Entity> {
   constructor(props) {
     super(props);
 
+    this.colors = this.generateColor();
+    this.next = Math.floor(Math.random() * this.props.nbrItems);
+
     this.station=<a-obj-model
         src={`url(metro_station.obj)`}
         mtl={`url(metro_station.mtl)`}
@@ -30,7 +33,10 @@ class MetroStationScene extends ActionScene<Entity> {
       this.ticket_machine = <TicketMachine position="19 9.9 0"
                               nbrItems={this.props.nbrItems}
                               rotation="0 -90 0"
-                              callback={this.ticket_machine_callback.bind(this)}/>
+                              callback={this.ticket_machine_callback.bind(this)}
+                              generateColors={this.determiniticGenerateColor.bind(this)}
+                              next={this.next}/>
+      console.log(this.colors[this.next]);
 
       this.train = <MetroTrain position="0 0 0" callback={this.train_callback.bind(this)}/>
       console.log(this.train);
@@ -111,6 +117,22 @@ class MetroStationScene extends ActionScene<Entity> {
             begin='end'/>);
   }
 
+  determiniticGenerateColor() {
+    return this.colors;
+  }
+
+  generateColor() {
+    let colors = ["#ff0000", "#00ff00", "#0000ff", '#ffff00', '#ff00ff', '#00ffff', '#660033', "#660066", '#336600', '#ff6600', '#4d1919'];
+    let colors2 = [];
+
+    while(colors.length > 0) {
+      let i = Math.floor(Math.random() * colors.length);
+      colors2.push(colors.splice(i, 1));
+    }
+
+    return colors2;
+  }
+
   ticket_machine_callback(id) {
     let camera = document.getElementById("camera");
     if(id === -1)
@@ -156,6 +178,18 @@ class MetroStationScene extends ActionScene<Entity> {
     return this.step === 1;
   }
 
+  color_path() {
+    let color = this.colors[this.next];
+
+    return(
+      <Entity>
+        <a-plane position='-3 18 -19.99' height="3" width="8" color={color} />
+        <a-plane rotation="-90 0 0" position="-3 10.01 5" height='35' width='1' color={color}/>
+        <a-text value='METRO' align="center" width="20" position='-3 18 -19.98' color="white" />
+      </Entity>
+    );
+  }
+
   render() {
 
     /*
@@ -163,6 +197,8 @@ class MetroStationScene extends ActionScene<Entity> {
     <a-light type='point' position='-2 15 -26' intensity="0.4" rotation="-90 0 0"/>
     <a-light type='ambient' intensity='0.2'/>
     */
+
+    let path = this.color_path();
 
     return(
       <Scene inspector='url: https://aframe.io/releases/0.3.0/aframe-inspector.min.js'>
@@ -189,10 +225,11 @@ class MetroStationScene extends ActionScene<Entity> {
             {this.tunnel}
           </Entity>
           <Entity primitive='a-plane' position="0 -0.1 0" rotation="-90 0 0" width="200" height="200" color="#202020" />
-          <Entity primitive='a-camera' id="camera" position='0 10.8 10'>
+          <Entity primitive='a-camera' id="camera" position='-3 10.8 10'>
               {this.events}
               <Entity primitive='a-cursor' />
           </Entity>
+          {path}
       </Scene>
     );
   }
