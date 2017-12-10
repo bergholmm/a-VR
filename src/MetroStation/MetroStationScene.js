@@ -35,6 +35,12 @@ class MetroStationScene extends ActionScene<Entity> {
       this.train = <MetroTrain position="0 0 0" callback={this.train_callback.bind(this)}/>
       console.log(this.train);
 
+      this.tunnel = <Entity>
+          <a-plane position='6.5 4.9 0' rotation="0 -90 0" height='10' width='30' color="black"/>
+          <a-plane position='-6.5 4.9 0' rotation="0 +90 0" height='10' width='30' color="black"/>
+          <a-plane position='0 9.9 0' rotation="+90 0 0" height='30' width='13' color="black"/>
+          <a-plane position='0 5 -15' height='10' width='13' color='black'/>
+          </Entity>
 
       this.events = [];
       this.events.push(<a-animation attribute="position"
@@ -151,8 +157,19 @@ class MetroStationScene extends ActionScene<Entity> {
   }
 
   render() {
+
+    /*
+    <a-light type='point' position='-2 20 0' intensity="0.4" rotation="-90 0 0"/>
+    <a-light type='point' position='-2 15 -26' intensity="0.4" rotation="-90 0 0"/>
+    <a-light type='ambient' intensity='0.2'/>
+    */
+
     return(
       <Scene inspector='url: https://aframe.io/releases/0.3.0/aframe-inspector.min.js'>
+
+      <a-light type='point' position='-2 20 0' intensity="0.4" rotation="-90 0 0"/>
+      <a-light type='point' position='-2 15 -26' intensity="0.4" rotation="-90 0 0"/>
+      <a-light type='ambient' intensity='0.2'/>
 
       <a-assets>
           <img id='skyTexture' src='https://ucarecdn.com/75af695e-0a70-4c64-af3b-7279d5ad916c/' alt='altprop' />
@@ -165,14 +182,17 @@ class MetroStationScene extends ActionScene<Entity> {
             {this.events_train}
             {this.train}
           </Entity>
-          <Entity primitive='a-plane' position="0 -0.1 0" rotation="-90 0 0" width="200" height="200" color="#505050" />
+          <Entity position="13.5 0 -78">
+            {this.tunnel}
+          </Entity>
+          <Entity position='-20.5 0 -78'>
+            {this.tunnel}
+          </Entity>
+          <Entity primitive='a-plane' position="0 -0.1 0" rotation="-90 0 0" width="200" height="200" color="#202020" />
           <Entity primitive='a-camera' id="camera" position='0 10.8 10'>
               {this.events}
               <Entity primitive='a-cursor' />
           </Entity>
-          <a-light type='point' position='-2 20 0' intensity="0.4" rotation="-90 0 0"/>
-          <a-light type='point' position='-2 15 -26' intensity="0.4" rotation="-90 0 0"/>
-          <a-light type='ambient' intensity='0.2'/>
       </Scene>
     );
   }
